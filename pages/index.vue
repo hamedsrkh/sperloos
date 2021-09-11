@@ -18,8 +18,8 @@ export default {
     }
   },
   methods:{
-    changeActiveCard(){
-      console.log('asfsaas')
+    changeActiveCard({id}){
+      this.activeCard = id
     }
   }
 }

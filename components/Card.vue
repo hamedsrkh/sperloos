@@ -1,31 +1,33 @@
 <template>
-  <div class="card">
-    <div class="card-info" v-if="isActive">
-      <span class="badge badge-purple">CREAT BOOST</span>
-      <Separator/>
-      <p class="picker-title">Pick Date Range:</p>
-      <div class="date-picker">
-        <div class="date">2020/09/10</div>
-        <span class="text-disable">To</span>
-        <div class="date">2020/09/10</div>
-      </div>
-    </div>
-    <div class="card-summery" v-else>
-      <div class="badge">BOOST</div>
-      <div class="card-footer">
-        <span class="title">LIKING</span>
-        <span class="counter">{{ item.likes }}</span>
-      </div>
-    </div>
-    <div class="expand" :class="{ active: isActive }" @click="activateCard">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs>
-      </defs>
-        <g transform="translate(-149 -18)"><rect fill="none" width="24" height="24" transform="translate(149 18)"/>
-          <path class="b" d="M25.91,16.875H19.125V10.09a1.125,1.125,0,0,0-2.25,0v6.785H10.09a1.125,1.125,0,0,0,0,2.25h6.785V25.91a1.125,1.125,0,0,0,2.25,0V19.125H25.91a1.125,1.125,0,0,0,0-2.25Z" transform="translate(143.035 12.035)"/>
-        </g>
-      </svg>
-    </div>
-  </div>
+ <div class="card-container">
+   <div class="expand" :class="{ active: isActive }" @click="activateCard">
+     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs>
+     </defs>
+       <g transform="translate(-149 -18)"><rect fill="none" width="24" height="24" transform="translate(149 18)"/>
+         <path class="b" d="M25.91,16.875H19.125V10.09a1.125,1.125,0,0,0-2.25,0v6.785H10.09a1.125,1.125,0,0,0,0,2.25h6.785V25.91a1.125,1.125,0,0,0,2.25,0V19.125H25.91a1.125,1.125,0,0,0,0-2.25Z" transform="translate(143.035 12.035)"/>
+       </g>
+     </svg>
+   </div>
+   <div class="card">
+     <div class="card-info" :class="{ show: isActive }" >
+       <span class="badge badge-purple">CREAT BOOST</span>
+       <Separator/>
+       <p class="picker-title">Pick Date Range:</p>
+       <div class="date-picker">
+         <div class="date">2020/09/10</div>
+         <span class="text-disable">To</span>
+         <div class="date">2020/09/10</div>
+       </div>
+     </div>
+     <div class="card-summery" v-show="!isActive">
+       <div class="badge">BOOST</div>
+       <div class="card-footer">
+         <span class="title">LIKING</span>
+         <span class="counter">{{ item.likes }}</span>
+       </div>
+     </div>
+   </div>
+ </div>
 </template>
 
 <script>
@@ -53,21 +55,24 @@ export default {
   },
   methods:{
     activateCard(){
-      this.$emit('change-active-card',{id:this.props.item.id})
+      this.$emit('changeActiveCard',{id: this.item.id })
     }
   }
 }
 </script>
 
 <style scoped>
+ .card-container{
+  position: relative;
+  margin-right: 16px;
+  margin-bottom: 50px;
+}
  .card{
    width: 256px;
    background: #FFFFFF 0 0 no-repeat padding-box;
    border: 1px solid #EAEAEA;
    border-radius: 8px;
    opacity: 1;
-   margin-right: 16px;
-   margin-bottom: 50px;
    padding: 24px 16px;
    position: relative;
    color: #3C3C3C;
@@ -106,8 +111,8 @@ export default {
    display: flex;
    align-items: center;
    justify-content: center;
-   position: absolute;
-   top: -10px;
+   position: relative;
+   top: 30px;
    left: 50%;
    transform: translateX(-50%);
    width: 232px;
@@ -127,10 +132,10 @@ export default {
  }
  .expand.active{
    background: #4F5BD5 0 0 no-repeat padding-box;
-   transform: translate(-50%, -30px);
+   transform: translate(-50%, -29px);
  }
- .card:hover .expand:not(.active){
-   transform: translate(-50%,-30px);
+ .card-container:hover .expand:not(.active){
+   transform: translate(-50%,-29px);
    z-index: 0;
  }
  .card-info{
@@ -138,7 +143,14 @@ export default {
    flex-direction: column;
    justify-content: flex-start;
    align-items: center;
-   min-height: 340px;
+   max-height: 0;
+   height: 0;
+   overflow: hidden;
+   transition: max-height 0.3s ease-out;
+ }
+ .card-info.show{
+   height: 340px;
+   max-height: 340px;
  }
  .picker-title{
    line-height: 14px;
